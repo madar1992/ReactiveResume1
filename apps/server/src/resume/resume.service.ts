@@ -10,9 +10,9 @@ import { defaultResumeData, ResumeData } from "@reactive-resume/schema";
 import type { DeepPartial } from "@reactive-resume/utils";
 import { generateRandomName, kebabCase } from "@reactive-resume/utils";
 import { ErrorMessage } from "@reactive-resume/utils";
-import { RedisService } from "@songkeys/nestjs-redis";
+//import { RedisService } from "@songkeys/nestjs-redis";
 import deepmerge from "deepmerge";
-import Redis from "ioredis";
+//import Redis from "ioredis";
 import { PrismaService } from "nestjs-prisma";
 
 import { PrinterService } from "@/server/printer/printer.service";
@@ -22,16 +22,16 @@ import { UtilsService } from "../utils/utils.service";
 
 @Injectable()
 export class ResumeService {
-  private readonly redis: Redis;
+ // private readonly redis: Redis;
 
   constructor(
     private readonly prisma: PrismaService,
     private readonly printerService: PrinterService,
     private readonly storageService: StorageService,
-    private readonly redisService: RedisService,
+   // private readonly redisService: RedisService,
     private readonly utils: UtilsService,
   ) {
-    this.redis = this.redisService.getClient();
+    //this.redis = this.redisService.getClient();
   }
 
   async create(userId: string, createResumeDto: CreateResumeDto) {
@@ -54,10 +54,10 @@ export class ResumeService {
       },
     });
 
-    await Promise.all([
-      this.redis.del(`user:${userId}:resumes`),
-      this.redis.set(`user:${userId}:resume:${resume.id}`, JSON.stringify(resume)),
-    ]);
+    // await Promise.all([
+    //  // this.redis.del(`user:${userId}:resumes`),
+    //   //this.redis.set(`user:${userId}:resume:${resume.id}`, JSON.stringify(resume)),
+    // ]);
 
     return resume;
   }
@@ -75,10 +75,10 @@ export class ResumeService {
       },
     });
 
-    await Promise.all([
-      this.redis.del(`user:${userId}:resumes`),
-      this.redis.set(`user:${userId}:resume:${resume.id}`, JSON.stringify(resume)),
-    ]);
+    // await Promise.all([
+    //   this.redis.del(`user:${userId}:resumes`),
+    //   this.redis.set(`user:${userId}:resume:${resume.id}`, JSON.stringify(resume)),
+    // ]);
 
     return resume;
   }
@@ -110,8 +110,8 @@ export class ResumeService {
 
   async findOneStatistics(userId: string, id: string) {
     const result = await Promise.all([
-      this.redis.get(`user:${userId}:resume:${id}:views`),
-      this.redis.get(`user:${userId}:resume:${id}:downloads`),
+     // this.redis.get(`user:${userId}:resume:${id}:views`),
+     // this.redis.get(`user:${userId}:resume:${id}:downloads`),
     ]);
 
     const [views, downloads] = result.map((value) => Number(value) || 0);
@@ -125,7 +125,7 @@ export class ResumeService {
     });
 
     // Update statistics: increment the number of views by 1
-    if (!userId) await this.redis.incr(`user:${resume.userId}:resume:${resume.id}:views`);
+   // if (!userId) await this.redis.incr(`user:${resume.userId}:resume:${resume.id}:views`);
 
     return resume;
   }
@@ -149,12 +149,12 @@ export class ResumeService {
         where: { userId_id: { userId, id } },
       });
 
-      await Promise.all([
-        this.redis.set(`user:${userId}:resume:${id}`, JSON.stringify(resume)),
-        this.redis.del(`user:${userId}:resumes`),
-        this.redis.del(`user:${userId}:storage:resumes:${id}`),
-        this.redis.del(`user:${userId}:storage:previews:${id}`),
-      ]);
+      // await Promise.all([
+      //   this.redis.set(`user:${userId}:resume:${id}`, JSON.stringify(resume)),
+      //   this.redis.del(`user:${userId}:resumes`),
+      //   this.redis.del(`user:${userId}:storage:resumes:${id}`),
+      //   this.redis.del(`user:${userId}:storage:previews:${id}`),
+      // ]);
 
       return resume;
     } catch (error) {
@@ -171,10 +171,10 @@ export class ResumeService {
       where: { userId_id: { userId, id } },
     });
 
-    await Promise.all([
-      this.redis.set(`user:${userId}:resume:${id}`, JSON.stringify(resume)),
-      this.redis.del(`user:${userId}:resumes`),
-    ]);
+    // await Promise.all([
+    //   this.redis.set(`user:${userId}:resume:${id}`, JSON.stringify(resume)),
+    //   this.redis.del(`user:${userId}:resumes`),
+    // ]);
 
     return resume;
   }
@@ -182,8 +182,8 @@ export class ResumeService {
   async remove(userId: string, id: string) {
     await Promise.all([
       // Remove cached keys
-      this.redis.del(`user:${userId}:resumes`),
-      this.redis.del(`user:${userId}:resume:${id}`),
+      // this.redis.del(`user:${userId}:resumes`),
+      // this.redis.del(`user:${userId}:resume:${id}`),
 
       // Remove files in storage, and their cached keys
       this.storageService.deleteObject(userId, "resumes", id),
@@ -197,7 +197,7 @@ export class ResumeService {
     const url = await this.printerService.printResume(resume);
 
     // Update statistics: increment the number of downloads by 1
-    if (!userId) await this.redis.incr(`user:${resume.userId}:resume:${resume.id}:downloads`);
+   // if (!userId) await this.redis.incr(`user:${resume.userId}:resume:${resume.id}:downloads`);
 
     return url;
   }

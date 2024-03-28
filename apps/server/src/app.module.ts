@@ -6,7 +6,6 @@ import { ZodValidationPipe } from "nestjs-zod";
 import { join } from "path";
 
 import { AuthModule } from "./auth/auth.module";
-import { CacheModule } from "./cache/cache.module";
 import { ConfigModule } from "./config/config.module";
 import { ContributorsModule } from "./contributors/contributors.module";
 import { DatabaseModule } from "./database/database.module";
@@ -27,7 +26,7 @@ import { S3Client,CreateBucketCommand, ListObjectsV2Command, PutObjectCommand, P
     DatabaseModule,
     MailModule,
     RavenModule,
-    CacheModule,
+   // CacheModule,
     UtilsModule,
     HealthModule,
 

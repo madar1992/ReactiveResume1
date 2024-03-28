@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { RedisService } from "@songkeys/nestjs-redis";
+//import { RedisService } from "@songkeys/nestjs-redis";
 import Redis from "ioredis";
 
 import { Config } from "../config/schema";
@@ -11,10 +11,10 @@ export class UtilsService {
   logger = new Logger(UtilsService.name);
 
   constructor(
-    private readonly redisService: RedisService,
+   // private readonly redisService: RedisService,
     private readonly configService: ConfigService<Config>,
   ) {
-    this.redis = this.redisService.getClient();
+    //this.redis = this.redisService.getClient();
   }
 
   getUrl(): string {
