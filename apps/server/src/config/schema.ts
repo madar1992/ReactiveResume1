@@ -48,7 +48,7 @@ export const configSchema = z.object({
     .transform((s) => s !== "false" && s !== "0"),
 
   // Redis
- // REDIS_URL: z.string().url().startsWith("redis://").optional(),
+ REDIS_URL: z.string().url().startsWith("redis://").optional(),
 
   // Sentry
   VITE_SENTRY_DSN: z.string().url().startsWith("https://").optional(),
