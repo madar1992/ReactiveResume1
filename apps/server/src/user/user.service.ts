@@ -1,22 +1,22 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import { ErrorMessage } from "@reactive-resume/utils";
-//import { RedisService } from "@songkeys/nestjs-redis";
-//import Redis from "ioredis";
+import { RedisService } from "@songkeys/nestjs-redis";
+import Redis from "ioredis";
 import { PrismaService } from "nestjs-prisma";
 
 import { StorageService } from "../storage/storage.service";
 
 @Injectable()
 export class UserService {
-  //private readonly redis: Redis;
+  private readonly redis: Redis;
 
   constructor(
     private readonly prisma: PrismaService,
     private readonly storageService: StorageService,
-   // private readonly redisService: RedisService,
+    private readonly redisService: RedisService,
   ) {
-   // this.redis = this.redisService.getClient();
+    this.redis = this.redisService.getClient();
   }
 
   async findOneById(id: string) {
@@ -71,7 +71,7 @@ export class UserService {
   }
 
   async deleteOneById(id: string) {
-    //await Promise.all([this.redis.del(`user:${id}:*`), this.storageService.deleteFolder(id)]);
+    await Promise.all([this.redis.del(`user:${id}:*`), this.storageService.deleteFolder(id)]);
 
     return await this.prisma.user.delete({ where: { id } });
   }

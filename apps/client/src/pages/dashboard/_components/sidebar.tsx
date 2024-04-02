@@ -40,7 +40,6 @@ type SidebarItemProps = SidebarItem & {
 
 const SidebarItem = ({ path, name, shortcut, icon, onClick }: SidebarItemProps) => {
   const isActive = useLocation().pathname === path;
- 
 
   return (
     <Button
@@ -70,8 +69,6 @@ type SidebarProps = {
 export const Sidebar = ({ setOpen }: SidebarProps) => {
   const { user } = useUser();
   const navigate = useNavigate();
-  
-
 
   useKeyboardShortcut(["shift", "r"], () => {
     navigate("/dashboard/resumes");
@@ -119,10 +116,6 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
       <div className="flex-1" />
 
       <Separator className="opacity-50" />
-
-      
-      
-      
 
       <UserOptions>
         <Button size="lg" variant="ghost" className="w-full justify-start px-3">

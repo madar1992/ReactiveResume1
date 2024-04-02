@@ -1,8 +1,8 @@
 import { Controller, Get, NotFoundException } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { HealthCheck, HealthCheckService } from "@nestjs/terminus";
-//import { RedisService } from "@songkeys/nestjs-redis";
-//import { RedisHealthIndicator } from "@songkeys/nestjs-redis-health";
+import { RedisService } from "@songkeys/nestjs-redis";
+import { RedisHealthIndicator } from "@songkeys/nestjs-redis-health";
 
 import { configSchema } from "../config/schema";
 import { UtilsService } from "../utils/utils.service";
@@ -18,8 +18,8 @@ export class HealthController {
     private readonly database: DatabaseHealthIndicator,
     private readonly browser: BrowserHealthIndicator,
     private readonly storage: StorageHealthIndicator,
-    //private readonly redisService: RedisService,
-    //private readonly redis: RedisHealthIndicator,
+    private readonly redisService: RedisService,
+    private readonly redis: RedisHealthIndicator,
     private readonly utils: UtilsService,
   ) {}
 
@@ -28,13 +28,13 @@ export class HealthController {
       () => this.database.isHealthy(),
       () => this.storage.isHealthy(),
       () => this.browser.isHealthy(),
-      // () => {
-      //   //return this.redis.checkHealth("redis", {
-      //     type: "redis",
-      //     timeout: 1000,
-      //     //client: this.redisService.getClient(),
-      //   });
-      // },
+      () => {
+        return this.redis.checkHealth("redis", {
+          type: "redis",
+          timeout: 1000,
+          client: this.redisService.getClient(),
+        });
+      },
     ]);
   }
 

@@ -6,6 +6,7 @@ import { ZodValidationPipe } from "nestjs-zod";
 import { join } from "path";
 
 import { AuthModule } from "./auth/auth.module";
+import { CacheModule } from "./cache/cache.module";
 import { ConfigModule } from "./config/config.module";
 import { ContributorsModule } from "./contributors/contributors.module";
 import { DatabaseModule } from "./database/database.module";
@@ -17,7 +18,6 @@ import { StorageModule } from "./storage/storage.module";
 import { TranslationModule } from "./translation/translation.module";
 import { UserModule } from "./user/user.module";
 import { UtilsModule } from "./utils/utils.module";
-import { S3Client,CreateBucketCommand, ListObjectsV2Command, PutObjectCommand, PutBucketPolicyCommand,DeleteObjectCommand, DeleteObjectsCommand } from "@aws-sdk/client-s3"; // Import AWS SDK v3
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { S3Client,CreateBucketCommand, ListObjectsV2Command, PutObjectCommand, P
     DatabaseModule,
     MailModule,
     RavenModule,
-   // CacheModule,
+    CacheModule,
     UtilsModule,
     HealthModule,
 
@@ -66,7 +66,6 @@ import { S3Client,CreateBucketCommand, ListObjectsV2Command, PutObjectCommand, P
         ],
       }),
     },
-    
   ],
 })
 export class AppModule {}

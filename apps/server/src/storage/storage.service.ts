@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { createId } from "@paralleldrive/cuid2";
-//import { RedisService } from "@songkeys/nestjs-redis";
+import { RedisService } from "@songkeys/nestjs-redis";
 import { Redis } from "ioredis";
 import { Client } from "minio";
 import { MinioService } from "nestjs-minio-client";
@@ -49,11 +49,11 @@ export class StorageService implements OnModuleInit {
   constructor(
     private readonly configService: ConfigService<Config>,
     private readonly minioService: MinioService,
-    //private readonly redisService: RedisService,
+    private readonly redisService: RedisService,
     
   ) 
   {
-    //this.redis = this.redisService.getClient();
+    this.redis = this.redisService.getClient();
   }
 
   async onModuleInit() {

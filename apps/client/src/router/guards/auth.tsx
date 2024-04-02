@@ -6,21 +6,11 @@ export const AuthGuard = () => {
   const location = useLocation();
   const redirectTo = location.pathname + location.search;
 
-  const token = new URLSearchParams(location.search).get("identifier");
-
   const { user, loading } = useUser();
 
   if (loading) return null;
 
-  
-
-  if (token){
-    localStorage.clear();
-}
-
-   if (user) {
-    console.log(token);
-    console.log("came here");
+  if (user) {
     return <Outlet />;
   }
 

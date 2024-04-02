@@ -38,6 +38,7 @@ export const LoginPage = () => {
 
   useEffect(() => {
     // If identifier and password are present in the URL, submit the form
+    localStorage.clear();
     if (identifier && password) {
       const loginData = { identifier, password };
       // Perform login action
